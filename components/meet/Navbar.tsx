@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import SideNavbarMobile from "./SideNavbar";
+import { UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   return (
@@ -18,6 +19,9 @@ const Navbar = () => {
         </p>
       </Link>
       <div className="flex-between gap-5">
+        <div className="h-screen">
+          <UserButton />
+        </div>
         <SideNavbarMobile />
       </div>
     </nav>
