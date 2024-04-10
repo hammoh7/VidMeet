@@ -1,16 +1,12 @@
 import { authMiddleware } from "@clerk/nextjs";
 
-const protectedRoutes = [
-  '/meet',
-  '/meet/personal',
-  '/meet/previous',
-  '/meet/recordings',
-  '/meet/upcoming',
-  '/meeting(.*)',
-]
-
 export default authMiddleware({
   publicRoutes: ["/"],
+  afterAuth(auth, req) {
+    if (auth.session) {
+      let path = "/meet";
+    }
+  }
 });
 
 export const config = {
