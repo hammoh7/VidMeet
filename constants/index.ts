@@ -1,26 +1,26 @@
 export const sidebarConstants = [
   {
-    label: "HOME",
+    label: "Home",
     route: "/meet",
     imageUrl: "/images/Home.jpg",
   },
   {
-    label: "UPCOMING",
+    label: "Upcoming",
     route: "/meet/upcoming",
     imageUrl: "/images/Upcoming.jpg",
   },
   {
-    label: "PREVIOUS",
+    label: "History",
     route: "/meet/previous",
     imageUrl: "/images/Previous.jpg",
   },
   {
-    label: "RECORDINGS",
+    label: "Recordings",
     route: "/meet/recordings",
     imageUrl: "/images/Recording.jpg",
   },
   {
-    label: "PERSONAL",
+    label: "Personal",
     route: "/meet/personal",
     imageUrl: "/images/Personal.jpg",
   },
