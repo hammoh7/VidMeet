@@ -19,7 +19,7 @@ const Navbar = () => {
         </p>
       </Link>
       <div className="flex-between gap-5">
-        <div className="w-4 h-4">
+        <div className="flex items-center justify-center mr-2 w-4 h-4">
           <UserButton afterSignOutUrl="/" />
         </div>
         <SideNavbarMobile />
