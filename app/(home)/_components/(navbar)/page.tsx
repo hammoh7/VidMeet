@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { ClerkLoaded, ClerkLoading, SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
 const Navbar = () => {
@@ -18,9 +20,25 @@ const Navbar = () => {
         </nav>
       </div>
       <div className="flex items-center mr-10">
-        <Button variant="ghost" className="items-center rounded-lg text-md">
-          <Link href="/login">Sign In</Link>
-        </Button>
+      <ClerkLoading>
+          <Loader2 className="h-4 w-4 text-muted-foreground animate-spin" />
+        </ClerkLoading>
+        <ClerkLoaded>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton
+              mode="modal"
+              afterSignInUrl="/meet"
+              afterSignUpUrl="/meet"
+            >
+              <Button size="lg" variant="ghost" className="items-center rounded-lg text-md">
+                Login
+              </Button>
+            </SignInButton>
+          </SignedOut>
+        </ClerkLoaded>
       </div>
       
     </header>
