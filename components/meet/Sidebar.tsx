@@ -10,7 +10,7 @@ const Sidebar = () => {
   const pathname = usePathname();
   return (
     <section className="sticky left-0 top-0 flex h-screen w-fit flex-col justify-between bg-slate-500 p-5 pt-32 text-white max-sm:hidden lg:w-[250px]">
-      <div className="flex flex-1 flex-col gap-5">
+      <div className="flex flex-1 flex-col gap-2">
         {sidebarConstants.map((link) => {
           const isActive =
             pathname === link.route;
