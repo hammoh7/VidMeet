@@ -10,59 +10,62 @@ import { useToast } from "../ui/use-toast";
 
 const MeetList = () => {
   const router = useRouter();
-  const [meeting, setMeeting] = useState<'isNewMeeting' | 'isJoiningMeeting' | 'isScheduleMeeting' | undefined>();
+  const [meeting, setMeeting] = useState<
+    "isNewMeeting" | "isJoiningMeeting" | "isScheduleMeeting" | undefined
+  >();
   const { user } = useUser();
   const client = useStreamVideoClient();
   const [values, setValues] = useState({
     dateTime: new Date(),
-    description: '',
-    link: '',
-  })
-  const [callDetails, setCallDetails] = useState<Call>()
+    description: "",
+    link: "",
+  });
+  const [callDetails, setCallDetails] = useState<Call>();
   const { toast } = useToast();
   const createMeeting = async () => {
     if (!client || !user) return;
 
     try {
       if (!values.dateTime) {
-        toast({ title: "Please select Date and Time" })
+        toast({ title: "Please select Date and Time" });
         return;
       }
 
       const id = crypto.randomUUID();
-      const call = client.call('default', id);
-      if (!call) throw new Error('Call missing!');
-      const startsAt = values.dateTime.toISOString() || new Date(Date.now()).toISOString();
-      const description = values.description || 'New Meeting';
+      const call = client.call("default", id);
+      if (!call) throw new Error("Call missing!");
+      const startsAt =
+        values.dateTime.toISOString() || new Date(Date.now()).toISOString();
+      const description = values.description || "New Meeting";
       await call.getOrCreate({
         data: {
           starts_at: startsAt,
           custom: {
-            description
-          }
-        }
-      })
+            description,
+          },
+        },
+      });
       setCallDetails(call);
 
       if (!values.description) {
         router.push(`/meeting/${call.id}`);
       }
 
-      toast({ title: "Meeting Created" })
+      toast({ title: "Meeting Created" });
     } catch (error) {
       console.log(error);
       toast({
         title: "Failed to Create Meeting",
         description: "Please try again",
-      })
+      });
     }
-  }
-  
+  };
+
   return (
     <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
       <div
         className="flex flex-col cursor-pointer bg-indigo-400 px-5 py-7 justify-between w-full xl:max-w-[250px] min-h-[250px] rounded-[12px]"
-        onClick={() => setMeeting('isNewMeeting')}
+        onClick={() => setMeeting("isNewMeeting")}
       >
         <div className="flex-center bg-indigo-200 size-10 rounded-[10px]">
           <LucideVideo height={24} width={24} />
@@ -74,7 +77,7 @@ const MeetList = () => {
       </div>
       <div
         className="flex flex-col cursor-pointer bg-blue-400 px-5 py-7 justify-between w-full xl:max-w-[250px] min-h-[250px] rounded-[12px]"
-        onClick={() => setMeeting('isJoiningMeeting')}
+        onClick={() => setMeeting("isJoiningMeeting")}
       >
         <div className="flex-center bg-blue-200 size-10 rounded-[10px]">
           <UserPlus2 height={24} width={24} />
@@ -86,7 +89,7 @@ const MeetList = () => {
       </div>
       <div
         className="flex flex-col cursor-pointer bg-violet-400 px-5 py-7 justify-between w-full xl:max-w-[250px] min-h-[250px] rounded-[12px]"
-        onClick={() => setMeeting('isScheduleMeeting')}
+        onClick={() => setMeeting("isScheduleMeeting")}
       >
         <div className="flex-center bg-violet-200 size-10 rounded-[10px]">
           <CalendarCheck2 height={24} width={24} />
@@ -98,7 +101,7 @@ const MeetList = () => {
       </div>
       <div
         className="flex flex-col cursor-pointer bg-red-400 px-5 py-7 justify-between w-full xl:max-w-[250px] min-h-[250px] rounded-[12px]"
-        onClick={() => router.push('/meet/recordings')}
+        onClick={() => router.push("/meet/recordings")}
       >
         <div className="flex-center bg-red-200 size-10 rounded-[10px]">
           <SaveIcon height={24} width={24} />
@@ -110,7 +113,7 @@ const MeetList = () => {
       </div>
 
       <Meeting
-        isOpen={meeting === 'isNewMeeting'}
+        isOpen={meeting === "isNewMeeting"}
         onClose={() => setMeeting(undefined)}
         title="Start a New Meeting"
         className="text-center"
