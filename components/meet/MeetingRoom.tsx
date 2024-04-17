@@ -3,25 +3,33 @@ import {
   CallControls,
   CallParticipantsList,
   CallStatsButton,
+  CallingState,
   PaginatedGridLayout,
   SpeakerLayout,
+  useCallStateHooks,
 } from "@stream-io/video-react-sdk";
 import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { List, UserSearch } from "lucide-react";
 import { Button } from "../ui/button";
+import { useSearchParams } from "next/navigation";
+import EndButton from "./EndButton";
+import { Loader } from "../Loader";
 
 type LayoutType = "left" | "right" | "grid";
 
 const MeetingRoom = () => {
   const [layout, setLayout] = useState<LayoutType>("left");
   const [participants, setParticipants] = useState(false);
+  const searchParams = useSearchParams();
+  const isPersonalRoom = !!searchParams.get("personal");
+  const { useCallCallingState } = useCallStateHooks();
+  const callingState = useCallCallingState();
 
   const Layout = () => {
     switch (layout) {
@@ -33,6 +41,8 @@ const MeetingRoom = () => {
         return <SpeakerLayout participantsBarPosition="right" />;
     }
   };
+
+  if (callingState !== CallingState.JOINED) return <Loader />;
 
   return (
     <div className="relative h-screen w-full overflow-hidden pt-3 text-white">
@@ -48,7 +58,7 @@ const MeetingRoom = () => {
           <CallParticipantsList onClose={() => setParticipants(false)} />
         </div>
       </div>
-      <div className="flex fixed bottom-0 w-full items-center justify-center gap-3">
+      <div className="flex flex-wrap fixed bottom-0 w-full items-center justify-center gap-3">
         <CallControls />
 
         <DropdownMenu>
@@ -75,11 +85,16 @@ const MeetingRoom = () => {
 
         <CallStatsButton />
 
-        <Button className="cursor-pointer px-2.5 py-2.5 rounded-3xl bg-gray-800 hover:bg-gray-600" onClick={() => setParticipants((prev) => !prev)}>
-            <div>
-                <UserSearch className="h-5 w-5" />
-            </div>
+        <Button
+          className="cursor-pointer px-2.5 py-2.5 rounded-3xl bg-gray-800 hover:bg-gray-600"
+          onClick={() => setParticipants((prev) => !prev)}
+        >
+          <div>
+            <UserSearch className="h-5 w-5" />
+          </div>
         </Button>
+
+        {!isPersonalRoom && <EndButton />}
       </div>
     </div>
   );
