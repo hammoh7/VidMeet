@@ -34,4 +34,19 @@ export const useMeetCalls = () => {
     loadCalls();
   }, [client, user?.id]);
 
+  const current = new Date();
+
+  const endedCalls = calls.filter(({ state: { startsAt, endedAt } }: Call) => {
+    return (startsAt && new Date(startsAt) < current) || !!endedAt;
+  });
+  const upcomingCalls = calls.filter(({ state: { startsAt } }: Call) => {
+    return startsAt && new Date(startsAt) > current;
+  });
+
+  return {
+    endedCalls,
+    upcomingCalls,
+    callRecordings: calls,
+    isLoading,
+  };
 };
