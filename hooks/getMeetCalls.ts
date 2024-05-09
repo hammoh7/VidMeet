@@ -17,7 +17,7 @@ export const getMeetCalls = () => {
         const { calls } = await client.queryCalls({
           sort: [{ field: "starts_at", direction: -1 }],
           filter_conditions: {
-            startsAt: { $exists: true },
+            starts_at: { $exists: true },
             $or: [
               { created_by_userId: user.id },
               { members: { $in: [user.id] } },
@@ -36,10 +36,10 @@ export const getMeetCalls = () => {
 
   const current = new Date();
 
-  const endedCalls = calls.filter(({ state: { startsAt, endedAt } }: Call) => {
+  const endedCalls = calls?.filter(({ state: { startsAt, endedAt } }: Call) => {
     return (startsAt && new Date(startsAt) < current) || !!endedAt;
   });
-  const upcomingCalls = calls.filter(({ state: { startsAt } }: Call) => {
+  const upcomingCalls = calls?.filter(({ state: { startsAt } }: Call) => {
     return startsAt && new Date(startsAt) > current;
   });
 
