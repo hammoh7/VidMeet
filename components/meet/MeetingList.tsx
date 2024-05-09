@@ -1,4 +1,3 @@
-//@ts-nocheck
 "use client";
 
 import { getMeetCalls } from "@/hooks/getMeetCalls";
@@ -16,7 +15,7 @@ const MeetingList = ({
     getMeetCalls();
   const router = useRouter();
   const [recordings, setRecordings] = useState<CallRecording[]>([]);
-                                                                                                                                    
+
   const getCalls = () => {
     switch (type) {
       case "done":
@@ -38,7 +37,7 @@ const MeetingList = ({
       case "upcoming":
         return "No Upcoming calls";
       default:
-        return '';
+        return "";
     }
   };
 
@@ -51,15 +50,30 @@ const MeetingList = ({
         calls.map((meeting: Call | CallRecording) => (
           <MeetingCard
             key={(meeting as Call).id}
-            title={(meeting as Call).state.custom.description.substring(0,20) || 'No description'}
-            date={meeting.state.startsAt.toLocaleString() || meeting.start_time.toLocaleString()}
+            title={
+              (meeting as Call).state?.custom?.description ||
+              (meeting as CallRecording).filename?.substring(0, 20) ||
+              'No Description'
+            }
+            date={
+              (meeting as Call).state?.startsAt?.toLocaleString() ||
+              (meeting as CallRecording).start_time?.toLocaleString()
+            }
             isPreviousMeeting={type === "done"}
-            handleClick={type === 'recordings' ? () => router.push(`${meeting.url}`) : () => router.push(`/meeting/${meeting.id}`)}
-            link={type === "recordings" ? meeting.url : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meeting.id}`}
+            link={
+              type === "recordings"
+                ? (meeting as CallRecording).url
+                : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${(meeting as Call).id}`
+            }
+            handleClick={
+              type === "recordings"
+                ? () => router.push(`${(meeting as CallRecording).url}`)
+                : () => router.push(`/meeting/${(meeting as Call).id}`)
+            }
           />
         ))
       ) : (
-        <h1>{noCalls}</h1>
+        <h1 className="text-xl font-semibold text-white">{noCalls}</h1>
       )}
     </div>
   );
